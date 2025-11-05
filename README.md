@@ -1,36 +1,83 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Real-Time AI Chatbot with Streaming
 
-## Getting Started
+A Next.js + TypeScript chatbot that streams AI responses over WebSockets with Socket.IO and Google Generative AI (Gemini).
 
-First, run the development server:
+### Tech Stack
+
+- React 18 / Next.js 16 App Router
+- TypeScript
+- Tailwind CSS
+- Socket.IO (WebSocket transport)
+- Google Generative AI (`@google/genai`) with streaming
+
+### Features (Core)
+
+- Chat UI with user/AI bubbles and timestamps
+- Auto-scroll to the latest message
+- Enter-to-send, button to send
+- Input disabled during AI response; character limit indicator
+- Connection status indicator (online/offline)
+- Real-time streaming display (token-by-token)
+- Basic reconnection logic, error handling
+
+### Bonus (Optional, partially included)
+
+- Clear chat via close button in header
+- Typing indicator animation while waiting for first chunk
+
+## Setup Instructions
+
+1. Requirements: Node 18+ (or Bun/PNPM/Yarn)
+
+2. Environment variables: create `.env.local` in the repo root with:
+
+```
+GEMINI_API_KEY=your_google_generative_ai_api_key
+```
+
+Note: If your environment blocks dotfiles creation, create `env.local` then rename to `.env.local`.
+
+3. Install dependencies:
+
+```bash
+npm install
+# or: pnpm i / yarn / bun install
+```
+
+4. Run the dev server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Visit `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## How It Works
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Client initializes Socket.IO by calling the API route at `/api/socket`, which boots a singleton Socket.IO server.
+- User messages are sent via `user_message` events.
+- Server calls Gemini with a system prompt + running conversation and streams back characters via `ai_response` events of type `stream`, then `end`.
+- UI renders the streaming text live and commits a final AI message on `end`.
 
-## Learn More
+## Commands
 
-To learn more about Next.js, take a look at the following resources:
+- `npm run dev` – start development
+- `npm run build` – production build
+- `npm run start` – start production server
+- `npm run lint` – run eslint
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Files to Review
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `src/pages/api/socket.ts` – Socket.IO server + Gemini streaming
+- `src/app/hooks/useWebSocket.ts` – client socket hook & lifecycle
+- `src/app/components/chatbot/*` – chat UI components
 
-## Deploy on Vercel
+## Submission Checklist
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Public GitHub repository with source code
+- `.env.example` or README documenting required env vars (see above)
+- Demo video link: add here
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Time Spent
+
+Add your time log here.

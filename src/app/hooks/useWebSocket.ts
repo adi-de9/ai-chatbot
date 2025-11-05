@@ -11,19 +11,7 @@ export const useWebSocket = (onMessage: (data: any) => void) => {
   }, [onMessage]);
 
   useEffect(() => {
-    // Initialize the Socket.IO server via API route, then connect client
-    (async () => {
-      try {
-        const res = await fetch("/api/socket");
-        if (!res.ok) {
-          console.error("Failed to init socket server:", res.status);
-        }
-      } catch (err) {
-        console.error("Error bootstrapping socket server:", err);
-      } finally {
-        socket.connect();
-      }
-    })();
+    socket.connect();
 
     function onConnect() {
       setIsConnected(true);
